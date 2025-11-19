@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Carte heuristique — Administrateur systèmes & réseaux</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    main{padding:28px}
+    .mindmap-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+    .mindmap-header h1{font-size:2.1rem;font-weight:700;letter-spacing:-1px;margin:0;color:#1a2330;}
+    .mindmap-header .muted{color:#6b7280;font-size:1rem;}
+    .mindmap-wrap{display:grid;grid-template-columns:1fr 340px;gap:32px;align-items:start}
+    .canvas-box{background:var(--surface);border:1px solid var(--border);padding:18px 18px 0 18px;border-radius:14px;box-shadow:0 4px 16px rgba(16,24,40,0.06)}
+    #mindmap{width:100%;height:600px;max-width:1000px;display:block;margin:0 auto;}
+  .node-circle{fill:#f7fafd;stroke:#b8c7d9;stroke-width:2.5;cursor:pointer;transition:stroke .12s,stroke-width .12s}
+    .node-text{font-size:15px;fill:#1a2330;font-family:Inter,Segoe UI,Arial,sans-serif;pointer-events:none;letter-spacing:-.2px}
+  /* Collapse/expand behavior: nodes start hidden and appear on click */
+  .node-group{transition:opacity .28s ease,transform .28s ease}
+  .node-group.collapsed{opacity:0;transform:translateY(10px) scale(.98);pointer-events:none}
+  .node-group:not(.collapsed){opacity:1;transform:none;pointer-events:auto}
+  /* Links (connectors) hidden/shown with the bubbles */
+  .links{transition:opacity .28s ease}
+  .links.collapsed{opacity:0;pointer-events:none}
+  /* Hover: increase stroke thickness without scaling to avoid moving lines */
+  .node-group:hover .node-circle{stroke:#0b5cff;stroke-width:3.6}
+    .node-group.active .node-circle{stroke:#0b5cff;filter:drop-shadow(0 2px 8px #0b5cff22)}
+    .node-group .node-circle{box-shadow:none}
+  .node-group:active .node-circle{stroke-width:3.8}
+    .info-panel{background:var(--surface);border:1px solid var(--border);padding:22px 18px 18px 18px;border-radius:14px;box-shadow:0 2px 8px #0b17200a}
+    .info-panel h3{margin:0 0 10px 0;font-size:1.18rem;font-weight:600;color:#1a2330;letter-spacing:-.5px}
+    .info-panel p{color:#2d3642;font-size:15px;line-height:1.5;margin:0 0 8px 0}
+    .chip{display:inline-block;padding:6px 13px;border-radius:999px;background:#f3f6fa;border:1px solid #dbe6f3;margin:7px 7px 0 0;font-size:13px;color:#1a2330;font-weight:500;letter-spacing:-.1px}
+    .toolbar{display:flex;gap:8px;align-items:center}
+    .small{font-size:13px;padding:8px 10px}
+    .btn{box-shadow:none;border:1px solid #dbe6f3;background:#f7fafd;color:#1a2330;transition:background .13s,border .13s}
+    .btn:hover{background:#eaf1fa;border-color:#b8c7d9;color:#0b5cff}
+    hr{margin:18px 0;border:none;border-top:1px solid #e6eef6}
+    @media (max-width:980px){.mindmap-wrap{grid-template-columns:1fr}}
+    @media (max-width:700px){#mindmap{height:400px}}
+  </style>
+</head>
+<body>
+  <main class="container">
+    <div class="mindmap-header">
+      <div>
+        <h1>Carte heuristique — Administrateur systèmes & réseaux</h1>
+        <p class="muted">Cliquez sur une bulle pour voir les compétences, outils et exemples d'activités.</p>
+      </div>
+      <div class="toolbar">
+        <button id="exportPng" class="btn small">Exporter PNG</button>
+        <button id="printBtn" class="btn small">Imprimer</button>
+      </div>
+    </div>
+
+    <div class="mindmap-wrap">
+      <div class="canvas-box">
+        <svg id="mindmap" viewBox="0 0 1100 800" xmlns="http://www.w3.org/2000/svg" aria-labelledby="mmTitle">
+          <title id="mmTitle">Carte heuristique — Administrateur systèmes et réseaux</title>
+          <defs>
+            <style>text{font-family:Inter,Arial,sans-serif}</style>
+          </defs>
+          <!-- Traits entre bulles (calculés pour s'arrêter au bord) -->
+          <!-- Centre -->
+          <g class="links">
+            <!-- Réseaux -->
+            <line x1="600" y1="370" x2="294" y2="221" stroke="#b8c7d9" stroke-width="2"/>
+            <!-- Virtualisation -->
+            <line x1="600" y1="430" x2="863" y2="211" stroke="#b8c7d9" stroke-width="2"/>
+            <!-- Sécurité -->
+            <line x1="550" y1="470" x2="550" y2="652" stroke="#b8c7d9" stroke-width="2"/>
+            <!-- Serveurs -->
+            <line x1="600" y1="430" x2="858" y2="576" stroke="#b8c7d9" stroke-width="2"/>
+            <!-- Monitoring -->
+            <line x1="500" y1="430" x2="290" y2="573" stroke="#b8c7d9" stroke-width="2"/>
+          </g>
+          <!-- Bulles principales -->
+          <g id="node-core" class="node-group" data-key="core">
+            <circle class="node-circle" cx="550" cy="400" r="70" fill="#f7fafd" stroke="#b8c7d9" stroke-width="2.5"/>
+            <g transform="translate(550,400)">
+              <text class="node-text" text-anchor="middle" font-size="15" font-weight="600" fill="#1a2330">
+                <tspan x="0" dy="-7" alignment-baseline="middle">Administrateur</tspan>
+                <tspan x="0" dy="18" alignment-baseline="middle">systèmes & réseaux</tspan>
+              </text>
+            </g>
+          </g>
+          <g class="node-group" data-key="reseaux">
+            <g transform="translate(250,200)">
+              <circle class="node-circle" r="48" fill="#f7fafd" stroke="#b8c7d9" stroke-width="2.5"/>
+              <text class="node-text" y="5" text-anchor="middle" font-size="14">Réseaux</text>
+            </g>
+          </g>
+          <g class="node-group" data-key="virtualisation">
+            <g transform="translate(900,180)">
+              <circle class="node-circle" r="48" fill="#f7fafd" stroke="#b8c7d9" stroke-width="2.5"/>
+              <text class="node-text" y="5" text-anchor="middle" font-size="14">Virtualisation</text>
+            </g>
+          </g>
+          <g class="node-group" data-key="securite">
+            <g transform="translate(550,700)">
+              <circle class="node-circle" r="48" fill="#f7fafd" stroke="#b8c7d9" stroke-width="2.5"/>
+              <text class="node-text" y="5" text-anchor="middle" font-size="14">Sécurité</text>
+            </g>
+          </g>
+          <g class="node-group" data-key="serveurs">
+            <g transform="translate(900,600)">
+              <circle class="node-circle" r="48" fill="#f7fafd" stroke="#b8c7d9" stroke-width="2.5"/>
+              <text class="node-text" y="5" text-anchor="middle" font-size="14">Serveurs</text>
+            </g>
+          </g>
+          <g class="node-group" data-key="monitoring">
+            <g transform="translate(250,600)">
+              <circle class="node-circle" r="48" fill="#f7fafd" stroke="#b8c7d9" stroke-width="2.5"/>
+              <text class="node-text" y="5" text-anchor="middle" font-size="14">Monitoring</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <aside class="info-panel">
+        <h3 id="info-title">Sélectionnez un nœud</h3>
+        <p id="info-desc">Cliquez sur une bulle pour afficher : compétences principales, outils et exemples concrets.</p>
+        <div id="info-chips" style="margin-top:12px"></div>
+        <hr style="margin:14px 0; border:none; border-top:1px solid var(--border)">
+        <p style="font-size:13px;color:var(--muted)">Conseil : exportez la carte en PNG pour l'ajouter à un CV ou un dossier de projet.</p>
+        <p style="margin-top:12px"><a class="btn" href="index.html">Retour au portfolio</a></p>
+      </aside>
+    </div>
+
+    <script>
+      const DATA = {
+        core: {
+          title: 'Administrateur systèmes & réseaux',
+          desc: "Responsable de l'infrastructure informatique : conception, déploiement, sécurité, supervision et support. Garant de la disponibilité et de la fiabilité des services.",
+          chips: ['VMware', 'DHCP', 'DNS', 'Active Directory', 'Sauvegardes']
+        },
+        reseaux: {
+          title: 'Réseaux',
+          desc: "Conception, configuration et maintenance des réseaux locaux et étendus. Gestion des VLAN, routage, sécurité et dépannage.",
+          chips: ['Cisco (CLI)', 'VLAN', 'DHCP', 'Routage']
+        },
+        virtualisation: {
+          title: 'Virtualisation',
+          desc: "Déploiement et gestion de machines virtuelles, optimisation des ressources, snapshots, migration et haute disponibilité.",
+          chips: ['VMware ESXi', 'Proxmox', 'Snapshots']
+        },
+        securite: {
+          title: 'Sécurité',
+          desc: "Mise en œuvre de politiques de sécurité, gestion des accès, sauvegardes, supervision et réponse aux incidents.",
+          chips: ['Pare-feu', 'Mises à jour', 'Sauvegardes']
+        },
+        serveurs: {
+          title: 'Serveurs',
+          desc: "Administration de serveurs Linux et Windows, gestion des services (web, base de données), automatisation et monitoring.",
+          chips: ['Apache', 'MariaDB', 'Windows Server']
+        },
+        parc: {
+          title: 'Gestion de parc',
+          desc: "Inventaire matériel et logiciel, gestion des tickets, documentation et support utilisateurs (OCS, GLPI).",
+          chips: ['OCS Inventory', 'GLPI', 'Tickets']
+        },
+        monitoring: {
+          title: 'Monitoring',
+          desc: "Surveillance proactive des services, alerting, tableaux de bord et reporting pour garantir la disponibilité.",
+          chips: ['Zabbix', 'Prometheus', 'Grafana']
+        },
+        scripting: {
+          title: 'Scripting',
+          desc: "Automatisation des tâches récurrentes, déploiement et configuration via scripts (Bash, Python, Ansible).",
+          chips: ['Bash', 'Python', 'Ansible']
+        }
+      };
+
+      const panelTitle = document.getElementById('info-title');
+      const panelDesc = document.getElementById('info-desc');
+      const panelChips = document.getElementById('info-chips');
+
+      function showNode(key){
+        const d = DATA[key] || {title:'—', desc:'—', chips:[]};
+        panelTitle.textContent = d.title;
+        panelDesc.textContent = d.desc;
+        panelChips.innerHTML = '';
+        d.chips.forEach(c=>{const el=document.createElement('span');el.className='chip';el.textContent=c;panelChips.appendChild(el)});
+        document.querySelectorAll('.node-group').forEach(g=>g.classList.remove('active'));
+        const selector = Array.from(document.querySelectorAll('.node-group')).find(g=>g.dataset.key===key);
+        if(selector) selector.classList.add('active');
+      }
+
+      // --- Click-to-reveal behavior ---
+      // Collapse all node groups except the core on load
+  const allNodes = Array.from(document.querySelectorAll('.node-group'));
+  const coreNode = document.getElementById('node-core');
+  const otherNodes = allNodes.filter(n=>n !== coreNode);
+  otherNodes.forEach(n=>n.classList.add('collapsed'));
+  // hide connecting lines initially as well
+  const linksGroup = document.querySelector('#mindmap g.links');
+  if(linksGroup) linksGroup.classList.add('collapsed');
+
+      // Attach click handlers: core toggles visibility of other bubbles; any visible bubble shows info
+      allNodes.forEach(g=>{
+        // set pointer where appropriate
+        g.style.cursor = 'pointer';
+        g.addEventListener('click', (e)=>{
+          // If clicked node is core -> toggle others and show core info
+          if(g === coreNode){
+            const anyHidden = otherNodes.some(n=>n.classList.contains('collapsed'));
+            otherNodes.forEach(n=>{
+              if(anyHidden) n.classList.remove('collapsed'); else n.classList.add('collapsed');
+            });
+            // toggle links together with nodes
+            if(linksGroup){
+              if(anyHidden) linksGroup.classList.remove('collapsed'); else linksGroup.classList.add('collapsed');
+            }
+            showNode('core');
+            return;
+          }
+          // If this node is collapsed, ignore click (pointer-events should prevent it), otherwise show info
+          if(g.classList.contains('collapsed')) return;
+          showNode(g.dataset.key);
+          e.stopPropagation();
+        });
+      });
+
+      // initial panel shows core
+      showNode('core');
+
+      // Export SVG as PNG
+      function svgToPng(svgEl, scale=2){
+        const svgData = new XMLSerializer().serializeToString(svgEl);
+        const svgBlob = new Blob([svgData], {type: 'image/svg+xml;charset=utf-8'});
+        const url = URL.createObjectURL(svgBlob);
+        return new Promise((resolve,reject)=>{
+          const img = new Image();
+          img.onload = ()=>{
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width * scale;
+            canvas.height = img.height * scale;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = getComputedStyle(document.body).backgroundColor || '#fff';
+            ctx.fillRect(0,0,canvas.width,canvas.height);
+            ctx.drawImage(img,0,0,canvas.width,canvas.height);
+            canvas.toBlob(blob=>{URL.revokeObjectURL(url);resolve(blob)},'image/png');
+          };
+          img.onerror = e=>reject(e);
+          img.src = url;
+        });
+      }
+
+      document.getElementById('exportPng').addEventListener('click', async ()=>{
+        const svg = document.getElementById('mindmap');
+        // set explicit width/height via viewBox size
+        const clone = svg.cloneNode(true);
+        // inline computed styles may be needed; keep simple by serializing
+        try{
+          const blob = await svgToPng(clone,2);
+          const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download='mindmap.png'; document.body.appendChild(a); a.click(); a.remove();
+        }catch(e){alert('Erreur lors de l\'export : '+e.message)}
+      });
+
+      document.getElementById('printBtn').addEventListener('click', ()=>window.print());
+    </script>
+  </main>
+</body>
+</html>
